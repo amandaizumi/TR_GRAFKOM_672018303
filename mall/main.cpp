@@ -2288,6 +2288,8 @@ int main(int argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_COLOR_MATERIAL);
     glutReshapeFunc(resize);
     glutDisplayFunc(renderScene);
 	glutKeyboardFunc(keyboardFunc);
