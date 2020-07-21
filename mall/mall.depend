@@ -235,3 +235,16 @@
 1341006770 c:\program files (x86)\codeblocks\mingw\include\assert.h
 	<_mingw.h>
 
+1595369379 source:c:\users\asus\documents\tr\tr_grafkom_672018303\mall\main.cpp
+	<stdlib.h>
+	<GL/glut.h>
+	"imageloader.h"
+	<fstream>
+	<assert.h>
+	<math.h>
+
+1595369379 c:\users\asus\documents\tr\tr_grafkom_672018303\mall\imageloader.h
+
+1341006774 c:\program files (x86)\codeblocks\mingw\include\math.h
+	<_mingw.h>
+

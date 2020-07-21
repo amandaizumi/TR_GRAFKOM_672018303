@@ -46,7 +46,7 @@ GLuint
     _textureStairWall,
     _textureDoorL,
     _textureDoorR,
-
+    _textureLogo3,
     _textureRed;
 
 //imageloader
@@ -241,6 +241,23 @@ static void resize(int width, int height)
     glLoadIdentity();
 }
 
+void setupLights()
+{
+	GLfloat ambient[] = {0.7f, 0.7f, 0.7, 1.0f};
+	GLfloat diffuse[] = {0.6f, 0.6f, 0.6, 1.0f};
+	GLfloat specular[] = {1.0f, 1.0f, 1.0, 1.0f};
+	GLfloat shininess[] = {50};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+	GLfloat lightIntensity[] = {0.7f, 0.7f, 1, 1.0f};
+	// GLfloat lightPosition[] = { -7.0f, 6.0f,3.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightIntensity);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
+}
+
 void drawSky()
 {
     glPushMatrix();
@@ -249,10 +266,10 @@ void drawSky()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTranslatef(0,0,-35);
         glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,0.1);  glVertex3f(-30,30,0);
-            glTexCoord3f(1.0,1.0,0.1);  glVertex3f(30,30,0);
-            glTexCoord3f(1.0,0.0,0.1);  glVertex3f(30,-30,0);
-            glTexCoord3f(0.0,0.0,0.1);  glVertex3f(-30,-30,0);
+            glTexCoord3f(0.0,1.0,0.1);  glVertex3f(-60,60,0);
+            glTexCoord3f(1.0,1.0,0.1);  glVertex3f(60,60,0);
+            glTexCoord3f(1.0,0.0,0.1);  glVertex3f(60,-60,0);
+            glTexCoord3f(0.0,0.0,0.1);  glVertex3f(-60,-60,0);
         glEnd();
     glPopMatrix();
 }
@@ -286,10 +303,27 @@ void drawFloor()
         glScalef(1.0,1.0,1.0);
         glBegin(GL_QUADS);
         glColor3f(0.75,0.75,0.75);
-            glTexCoord3f(15.0,0.0,1);  glVertex3f(-6,-1.5,5);
+            glTexCoord3f(15.0,0.0,1);  glVertex3f(-6,-1.5,7);
             glTexCoord3f(0.0,0.0,-1);  glVertex3f(-6,-1.5,-6);
             glTexCoord3f(0.0,15.0,-1);  glVertex3f(21.7,-1.5,-6);
-            glTexCoord3f(15.0,15.0,1);  glVertex3f(21.7,-1.5,5);
+            glTexCoord3f(15.0,15.0,1);  glVertex3f(21.7,-1.5,7);
+        glEnd();
+    glPopMatrix();
+
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, _textureMallFloor);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTranslatef(0,0,-6);
+        glRotatef(angle, 0.0, 1.0, 0.0);
+        glTranslatef(4.0,7.0,-6.0);
+        glScalef(1.0,1.0,1.0);
+        glBegin(GL_QUADS);
+        glColor3f(0.75,0.75,0.75);
+            glTexCoord3f(15.0,0.0,1);  glVertex3f(-6,-1.5,7);
+            glTexCoord3f(0.0,0.0,-1);  glVertex3f(-6,-1.5,-6);
+            glTexCoord3f(0.0,15.0,-1);  glVertex3f(21.7,-1.5,-6);
+            glTexCoord3f(15.0,15.0,1);  glVertex3f(21.7,-1.5,7);
         glEnd();
     glPopMatrix();
 }
@@ -646,6 +680,18 @@ void drawBase_Front()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTranslatef(0.75,0.069,0.0);
     glScalef(1.15,0.80,1);
+    glBegin(GL_QUADS);
+        glTexCoord3f(0.0,1.0,1.0001); glVertex3f(-2.5,0.0,1.0001);
+        glTexCoord3f(1.0,1.0,1.0001); glVertex3f(-0.75,0.0,1.0001);
+        glTexCoord3f(1.0,0.0,1.0001); glVertex3f(-0.75,-0.2,1.0001);
+        glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-2.5,-0.2,1.0001);
+        glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, _textureLogo3);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTranslatef(2.0,2.73,-2.1);
+    glScalef(3.0,3.0,3.0);
     glBegin(GL_QUADS);
         glTexCoord3f(0.0,1.0,1.0001); glVertex3f(-2.5,0.0,1.0001);
         glTexCoord3f(1.0,1.0,1.0001); glVertex3f(-0.75,0.0,1.0001);
@@ -1200,6 +1246,25 @@ void drawStairs()
             glTexCoord3f(0.0,0.0,0.1);      glVertex3f(-2,1.0,-3.0);
         glEnd();
         glPopMatrix();
+
+        //another floor 2
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, _textureGrey);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTranslatef(0,0,-6);
+        glRotatef(angle, 0.0, 1.0, 0.0);
+        glTranslatef(4.0,0.00013,-15.0);
+        glScalef(1.0,1.0,1.0);
+        glBegin(GL_QUADS);
+        glColor3f(0.75,0.75,0.75);
+            glTexCoord3f(15.0,0.0,1);  glVertex3f(-6,1.0,7.1);//left_depan
+            glTexCoord3f(0.0,0.0,-1);  glVertex3f(-6,1.0,3);//left_belakang
+            glTexCoord3f(0.0,15.0,-1);  glVertex3f(21.7,1.0,3);//right_belakang
+            glTexCoord3f(15.0,15.0,1);  glVertex3f(21.7,1.0,7.1);//right_depan
+        glEnd();
+    glPopMatrix();
+
 }
 
 void drawDoubleDoor()
@@ -1682,14 +1747,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1723,14 +1780,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1764,14 +1813,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1841,14 +1882,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1882,14 +1915,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1923,14 +1948,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
         glEnd();
 
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
-        glEnd();
     glPopMatrix();
     //end
 
@@ -1962,15 +1979,6 @@ void drawBaseSecondLevel()
             glTexCoord3f(1.0,1.0,1.0001); glVertex3f(-0.75,-0.3,1.0001);
             glTexCoord3f(1.0,0.0,1.0001); glVertex3f(-0.75,-0.8,1.0001);
             glTexCoord3f(0.0,0.0,1.0001); glVertex3f(-1.5,-0.8,1.0001);
-        glEnd();
-
-    //wall_dd windows right
-    glTranslatef(-0.75,0.0,0.0);
-    glBegin(GL_QUADS);
-            glTexCoord3f(0.0,1.0,1.0001); glVertex3f(1.5,-0.3,1.0001);
-            glTexCoord3f(1.0,1.0,1.0001); glVertex3f(0.75,-0.3,1.0001);
-            glTexCoord3f(1.0,0.0,1.0001); glVertex3f(0.75,-0.8,1.0001);
-            glTexCoord3f(0.0,0.0,1.0001); glVertex3f(1.5,-0.8,1.0001);
         glEnd();
     glPopMatrix();
     //end
@@ -2022,6 +2030,8 @@ void drawBase()
 }
 
 void renderScene(void) {
+    setupLights();
+
     if (is_depth)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     else
@@ -2174,61 +2184,64 @@ void Initialize() {
 
 	//source texture
 	Image*
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\sky.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\sky.bmp");
 	_textureSky = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\street.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\street.bmp");
 	_textureStreet = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\outerlayer.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\outerlayer.bmp");
 	_textureOuterLayer = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\wallinside.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\wallinside.bmp");
 	_textureWallInside = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\window1.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\window1.bmp");
 	_textureWindow1 = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\grey.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\grey.bmp");
 	_textureGrey = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\logo1.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\logo1.bmp");
 	_textureLogo1 = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\door2.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\door2.bmp");
 	_texturedoor2 = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\logo2.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\logo2.bmp");
 	_textureLogo2 = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\window2.bmp");
+		image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\logo3.bmp");
+	_textureLogo3 = loadTexture(image);
+
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\window2.bmp");
 	_textureWindow2 = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\mallfloor.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\mallfloor.bmp");
 	_textureMallFloor = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\stairwall.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\stairwall.bmp");
 	_textureStairWall = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\doorL.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\doorL.bmp");
 	_textureDoorL = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\doorR.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\doorR.bmp");
 	_textureDoorR = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\bricks.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\bricks.bmp");
 	_textureBrick = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\door.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\door.bmp");
 	_textureDoor = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\grass.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\grass.bmp");
 	_textureGrass = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\roof.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\roof.bmp");
 	_textureRoof = loadTexture(image);
 
-	image = loadBMP("C:\\Users\\juice\\Desktop\\Graphics\\Offline6\\window.bmp");
+	image = loadBMP("C:\\Users\\Asus\\Documents\\TR\\TR_GRAFKOM_672018303\\mall\\Offline6\\window.bmp");
 	_textureWindow = loadTexture(image);
 
 	delete image;
@@ -2271,8 +2284,10 @@ int main(int argc, char **argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(0,0);
 	glutInitWindowSize(1366,768);
-	glutCreateWindow("TR_GRAFKOM_672018303");
+	glutCreateWindow("TR-GRAFKOM-672018303-672018325");
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
     glutReshapeFunc(resize);
     glutDisplayFunc(renderScene);
 	glutKeyboardFunc(keyboardFunc);
