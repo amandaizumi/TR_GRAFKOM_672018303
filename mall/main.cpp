@@ -3,6 +3,7 @@
 #include "imageloader.h"
 #include <fstream>
 #include <assert.h>
+#include <math.h>
 using namespace std;
 
 float angle = 0;
@@ -11,6 +12,18 @@ float mainDoorLeft = 0, mainDoorRight = 0;
 float exitDoorLeft = 0, exitDoorRight = 0;
 int is_depth;
 GLUquadricObj *Disk;
+
+// actual vector representing the camera's direction
+float lx=0.0f,lz=-1.0f;
+
+// XZ position of the camera
+float x=0.0f, z=5.0f;
+
+// the key states. These variables will be zero
+//when no key is being presses
+float deltaAngle = 0.0f;
+float deltaMove = 0;
+int xOrigin = -1;
 
 //var texture
 GLuint
@@ -2221,6 +2234,36 @@ void Initialize() {
 	delete image;
 }
 
+void mouseMove(int x, int y) {
+
+         // this will only be true when the left button is down
+         if (xOrigin >= 0) {
+
+		// update deltaAngle
+		deltaAngle = (x - xOrigin) * 0.10f;
+
+		// update camera's direction
+		lx = sin(angle + deltaAngle);
+		lz = -cos(angle + deltaAngle);
+	}
+}
+
+void mouseButton(int button, int state, int x, int y) {
+
+	// only start motion if the left button is pressed
+	if (button == GLUT_LEFT_BUTTON) {
+
+		// when the button is released
+		if (state == GLUT_UP) {
+			angle += deltaAngle;
+			xOrigin = -1;
+		}
+		else  {// state = GLUT_DOWN
+			xOrigin = x;
+		}
+	}
+}
+
 int main(int argc, char **argv) {
     printf("Press Z for Main Door on & off\n");
     printf("Press X for Exit Door on & off");
@@ -2234,6 +2277,11 @@ int main(int argc, char **argv) {
     glutDisplayFunc(renderScene);
 	glutKeyboardFunc(keyboardFunc);
 	glutSpecialFunc(mySpecialFunc);
+
+	// here are the two new functions
+	glutMouseFunc(mouseButton);
+	glutMotionFunc(mouseMove);
+
 	Initialize();
 
 	glutMainLoop();
